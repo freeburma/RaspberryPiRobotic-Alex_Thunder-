@@ -355,9 +355,10 @@ if __name__ == '__main__' :
 						print("Speed 69")
 						Forward(69)	
 						
-					elif (dist >= 31 and dist <= 60): 
+					elif (dist >= 31 and dist <= 200): 
 						print("Full Speed")
-						Forward(70)		
+						Forward(100)
+
 						
 					else:
 						print("OOOOOOOO! Object Detected")
