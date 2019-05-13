@@ -126,7 +126,7 @@ def MotorWithSpeedControl():
 
 	while(1):
 
-		x=raw_input()
+		x = input()
 		
 		if x=='r':
 			print("run")
@@ -285,6 +285,38 @@ def StopMortors():
 	GPIO.output(in4,GPIO.LOW)
         
 if __name__ == '__main__' : 
+
+	# Reading keyboard input 
+	print("Enter input: ")
+	input_str = input() ### Python 3 keyboard input
+	print(">>>>>>" + input_str)
+	
+	if input_str =='\x1b[A':
+		print("Go Straight")
+		Forward()
+
+	elif input_str =='\x1b[B':
+		print("Go Backward")
+		Backward()
+
+	elif input_str =='\x1b[C':
+		print("Go right")
+		GoRight()
+
+	elif input_str =='\x1b[D':
+		print("Go left")
+		GoLeft()
+
+	elif input_str == '0':
+		print("StoPPPPPPPPPPP")
+		StopMortors()
+
+
+	else: 
+		print("Manual Mode")
+
+
+
 	try : 
 		
 		'''
@@ -371,7 +403,7 @@ if __name__ == '__main__' :
 		
 		GPIO.CleanUp()
 			
-	# Reset by Prising CTRL + C
+	# Reset by Pressing CTRL + C
 	except KeyboardInterrupt : 
-		print("Measurment stopped by the user")
+		print("Measurement stopped by the user")
 		GPIO.cleanup()        
