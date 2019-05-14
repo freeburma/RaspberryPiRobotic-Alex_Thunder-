@@ -286,12 +286,11 @@ def StopMortors():
         
 if __name__ == '__main__' : 
 
-	print("Enter input: ")
+	print("Enter input: Press [q: to quit]")
 	input_str = raw_input() ### Python 3 keyboard input
 
 	while(input_str != 'q'): 
 		# Reading keyboard input 
-		print("Enter input: Press [q: to quit]")
 		input_str = raw_input() ### Python 3 keyboard input
 		print(">>>>>>" + input_str)
 		
