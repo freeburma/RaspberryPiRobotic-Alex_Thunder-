@@ -288,7 +288,7 @@ if __name__ == '__main__' :
 
 	# Reading keyboard input 
 	print("Enter input: ")
-	input_str = input() ### Python 3 keyboard input
+	input_str = raw_input() ### Python 3 keyboard input
 	print(">>>>>>" + input_str)
 	
 	if input_str =='\x1b[A':
