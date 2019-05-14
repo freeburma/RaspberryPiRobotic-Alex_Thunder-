@@ -297,7 +297,7 @@ if __name__ == '__main__' :
 		
 		if input_str =='\x1b[A':
 			print("Go Straight")
-			Forward()
+			Forward(80)
 
 		elif input_str =='\x1b[B':
 			print("Go Backward")
@@ -317,7 +317,7 @@ if __name__ == '__main__' :
 		
 		elif input_str == 'q':
 			break
-			
+
 		else: 
 			print("Manual Mode")
 
