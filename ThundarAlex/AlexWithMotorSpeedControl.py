@@ -291,7 +291,7 @@ if __name__ == '__main__' :
 	input_str = input() ### Python 3 keyboard input
 	print(">>>>>>" + input_str)
 	
-	if input_str =='\x1b[A':
+	if input_str =='a':
 		print("Go Straight")
 		Forward()
 
