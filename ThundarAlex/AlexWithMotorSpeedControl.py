@@ -316,7 +316,6 @@ if __name__ == '__main__' :
 		print("Manual Mode")
 
 
-
 	try : 
 		
 		'''
@@ -332,6 +331,7 @@ if __name__ == '__main__' :
 		
 		StopMortors() # Initializing 
 		
+		'''
 		while True : 
 			dist = Distance()
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
@@ -400,7 +400,7 @@ if __name__ == '__main__' :
 				
 			
 			time.sleep(0.5)
-		
+		'''
 		GPIO.CleanUp()
 			
 	# Reset by Pressing CTRL + C
