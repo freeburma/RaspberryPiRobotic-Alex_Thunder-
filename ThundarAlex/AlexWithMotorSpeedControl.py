@@ -286,34 +286,40 @@ def StopMortors():
         
 if __name__ == '__main__' : 
 
-	# Reading keyboard input 
 	print("Enter input: ")
 	input_str = raw_input() ### Python 3 keyboard input
-	print(">>>>>>" + input_str)
-	
-	if input_str =='\x1b[A':
-		print("Go Straight")
-		Forward()
 
-	elif input_str =='\x1b[B':
-		print("Go Backward")
-		Backward()
+	while(input_str != 'q'): 
+		# Reading keyboard input 
+		print("Enter input: Press [q: to quit]")
+		input_str = raw_input() ### Python 3 keyboard input
+		print(">>>>>>" + input_str)
+		
+		if input_str =='\x1b[A':
+			print("Go Straight")
+			Forward()
 
-	elif input_str =='\x1b[C':
-		print("Go right")
-		GoRight()
+		elif input_str =='\x1b[B':
+			print("Go Backward")
+			Backward()
 
-	elif input_str =='\x1b[D':
-		print("Go left")
-		GoLeft()
+		elif input_str =='\x1b[C':
+			print("Go right")
+			GoRight()
 
-	elif input_str == '0':
-		print("StoPPPPPPPPPPP")
-		StopMortors()
+		elif input_str =='\x1b[D':
+			print("Go left")
+			GoLeft()
 
-
-	else: 
-		print("Manual Mode")
+		elif input_str == '0':
+			print("StoPPPPPPPPPPP")
+			StopMortors()
+		
+		elif input_str == 'q':
+			break
+			
+		else: 
+			print("Manual Mode")
 
 
 	try : 
