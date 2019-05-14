@@ -126,7 +126,7 @@ def MotorWithSpeedControl():
 
 	while(1):
 
-		x = input()
+		x = raw_input()
 		
 		if x=='r':
 			print("run")
@@ -291,7 +291,7 @@ if __name__ == '__main__' :
 	input_str = input() ### Python 3 keyboard input
 	print(">>>>>>" + input_str)
 	
-	if input_str =='a':
+	if input_str =='\x1b[A':
 		print("Go Straight")
 		Forward()
 
