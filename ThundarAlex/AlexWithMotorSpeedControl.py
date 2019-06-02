@@ -1,9 +1,17 @@
 import RPi.GPIO as GPIO          
-import time
+import time, datetime
 
 # Working code -- Have to use BCM Board type to control motor
 DutyCycle = 65
 GPIO.setmode(GPIO.BCM)
+
+# ================ Obstical Avoidance Sensor Port =======
+ObstaclePin = 20
+GPIO.setup(ObstaclePin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# ================ Obstical Avoidance Sensor Port =======
+
+
 
 # ================ Ultrasonic Sensor Port ================ 
 GPIO_TRIGGER = 23 	# 16
@@ -61,6 +69,10 @@ p2=GPIO.PWM(en2,1000)
 p.start(DutyCycle)
 p2.start(DutyCycle)
 # ====================== Motors Port ====================== 
+
+def ObsticalAvoidance(): 
+	if (GPIO.input(ObstaclePin) == 0): 
+		print(str(datetime.datetime.now().time()) + " >> Barrier is detected !")
 
 
 def Distance(): 
@@ -285,11 +297,13 @@ def StopMortors():
 	GPIO.output(in4,GPIO.LOW)
         
 if __name__ == '__main__' : 
+	
+	'''
 
 	print("Enter input: Press [q: to quit]")
 	input_str = raw_input() ### Python 3 keyboard input
 
-	while(input_str != 'q'): 
+	while(input_str != 'q'):  
 		# Reading keyboard input 
 		input_str = raw_input() ### Python 3 keyboard input
 		print(">>>>>>" + input_str)
@@ -319,6 +333,8 @@ if __name__ == '__main__' :
 
 		else: 
 			print("Manual Mode")
+			
+	'''
 
 
 	try : 
@@ -336,8 +352,11 @@ if __name__ == '__main__' :
 		
 		StopMortors() # Initializing 
 		
-		'''
+		''' '''
 		while True : 
+			
+			ObsticalAvoidance()
+			
 			dist = Distance()
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
 			
@@ -406,7 +425,8 @@ if __name__ == '__main__' :
 			
 			time.sleep(0.5)
 		GPIO.CleanUp()
-		'''
+		
+		''' '''
 		
 
 	# Reset by Pressing CTRL + C
