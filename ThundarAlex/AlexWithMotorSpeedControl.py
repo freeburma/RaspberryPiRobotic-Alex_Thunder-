@@ -71,8 +71,12 @@ p2.start(DutyCycle)
 # ====================== Motors Port ====================== 
 
 def ObsticalAvoidance(): 
-	if (GPIO.input(ObstaclePin) == 0): 
+	
+	if (GPIO.input(ObstaclePin) == 0): ### Obstacle detected
 		print(str(datetime.datetime.now().time()) + " >> Barrier is detected !")
+		return True
+	
+	return False
 
 
 def Distance(): 
@@ -85,15 +89,19 @@ def Distance():
 	
 	StartTime = time.time()
 	StopTime = time.time()
+	count = time.time()
 	
 	# Save time of StartTime 
-	while GPIO.input(GPIO_ECHO) == 0 : 
+	# while GPIO.input(GPIO_ECHO) == 0 : 
+	while (GPIO.input(GPIO_ECHO) == 0) and (time.time() - count < 0.1): 
 		StartTime = time.time()
-				
+	
+	count = time.time()			
 		
 	# Save time of arrival 
-	while GPIO.input(GPIO_ECHO) == 1 : 
+	while (GPIO.input(GPIO_ECHO) == 1) and (time.time() - count < 0.1): 
 		StopTime = time.time()
+	
 	
 		
 	# Time difference between start and arrival
@@ -125,7 +133,10 @@ def Right_LineTracking():
 		# print("[-] D2: BLackkkk Line Found ...")
 		return True		
 		
-
+'''
+	Allows to test forward, backward, trun left and turn right by using keyboard, 
+	however, you needs to press "Enter" key to perform. 
+'''
 def MotorWithSpeedControl():
 	
 	temp1=1
@@ -355,13 +366,13 @@ if __name__ == '__main__' :
 		''' '''
 		while True : 
 			
-			ObsticalAvoidance()
+			isBarrier = ObsticalAvoidance()
 			
 			dist = Distance()
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
 			
 			# An object detected 
-			if (dist <= 3): 
+			if (dist <= 3 and isBarrier): 
 				print("OOOOOOOO! Object Detected")
 				StopMortors()	
 			else:
@@ -395,35 +406,36 @@ if __name__ == '__main__' :
 					
 										
 					# An object detected 
-					if (dist <= 3): 
+					if (dist <= 3.5 and isBarrier): 
 						print("OOOOOOOO! Object Detected")
 						StopMortors()	
 					
 					elif (dist >= 4 and dist <= 10): 
-						print("Speed 66")
-						Forward(66)	
+						print("Speed 10")
+						Forward(10)	
 						
 					elif (dist >= 11 and dist <= 20): 
-						print("Speed 68")
-						Forward(68)		
+						print("Speed 20")
+						Forward(20)		
 						
 					elif (dist >= 21 and dist <= 30): 
-						print("Speed 69")
-						Forward(69)	
+						print("Speed 35")
+						Forward(35)	
 						
-					elif (dist >= 31 and dist <= 200): 
-						print("Full Speed")
-						Forward(100)
+					# elif (dist >= 31 and dist <= 276): 
+					else:
+						print("Full Speed 45")
+						Forward(45)
 
-						
+					'''
 					else:
 						print("OOOOOOOO! Object Detected")
 						StopMortors()		
-						
+					'''
 				
 				
 			
-			time.sleep(0.5)
+			time.sleep(0.25)
 		GPIO.CleanUp()
 		
 		''' '''
