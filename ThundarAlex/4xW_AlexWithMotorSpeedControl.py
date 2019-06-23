@@ -250,8 +250,8 @@ def Forward(cusDuty):
 	GPIO.output(in2,GPIO.LOW)
 
 	# Motor 2
-	GPIO.output(in3,GPIO.HIGH)
-	GPIO.output(in4,GPIO.LOW)
+	# GPIO.output(in3,GPIO.HIGH)
+	# GPIO.output(in4,GPIO.LOW)
 	
 	p.ChangeDutyCycle(cusDuty)
 	p2.ChangeDutyCycle(cusDuty)
@@ -263,41 +263,27 @@ def Backward(cusDuty):
 	# Motor 1 
 	GPIO.output(in1,GPIO.LOW)
 	GPIO.output(in2,GPIO.HIGH)
-
-	# Motor 3 
-	GPIO.output(in3,GPIO.LOW)
-	GPIO.output(in4,GPIO.HIGH)	
 	
 	p.ChangeDutyCycle(cusDuty)
-	p2.ChangeDutyCycle(cusDuty)
 	
 	
 
 def GoRight(cusDuty): 
 	print("Right")
-	# Motor 1 
-	GPIO.output(in1,GPIO.HIGH)
-	GPIO.output(in2,GPIO.LOW)
-
-	# Motor 2
+	
 	GPIO.output(in3,GPIO.LOW)
 	GPIO.output(in4,GPIO.HIGH)
 	
-	p.ChangeDutyCycle(cusDuty)
+	
 	p2.ChangeDutyCycle(cusDuty)
 	
 	
 def GoLeft(cusDuty): 
 	print("Left")
-	# Motor 1 
-	GPIO.output(in1,GPIO.LOW)
-	GPIO.output(in2,GPIO.HIGH)
-
-	# Motor 2
+	
 	GPIO.output(in3,GPIO.HIGH)
 	GPIO.output(in4,GPIO.LOW)
-	
-	p.ChangeDutyCycle(cusDuty)
+		
 	p2.ChangeDutyCycle(cusDuty)
 	
 def StopMortors(): 
@@ -352,7 +338,7 @@ if __name__ == '__main__' :
 		
 		
 		StopMortors() # Initializing 
-		''' '''
+		''' 
 		# Testing 
 		# MotorWithSpeedControl()
 				
@@ -360,22 +346,22 @@ if __name__ == '__main__' :
 		time.sleep(3)
 		
 		Backward(100)		
-		time.sleep(1)
+		time.sleep(3)	
 		
-		# GoRight(100)
-		# time.sleep(3)
+		GoRight(100)
+		time.sleep(3)
 		
 		
 		
-		# GoLeft(100)
-		# time.sleep(3)
+		GoLeft(100)
+		time.sleep(3)
 				
 		
+		''' 
+		
+		
+		
 		''' '''
-		
-		
-		
-		'''
 		while True : 
 			
 			isBarrier = ObsticalAvoidance()
@@ -384,8 +370,8 @@ if __name__ == '__main__' :
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
 			
 			# An object detected 
-			if (dist <= 3 and isBarrier): 
-				print("OOOOOOOO! Object Detected")
+			if (dist <= 6 and isBarrier): 
+				print("Main: OOOOOOOO! Object Detected")
 				StopMortors()	
 			else:
 			
@@ -396,13 +382,13 @@ if __name__ == '__main__' :
 				# Go Left
 				if (left == True and right == False) : 
 					print ("<<<<<<<<<<<<<<<< Go Left")
-					GoLeft()
+					GoLeft(100)
 						
 					
 				# Go Right	
 				elif (left == False and right == True) : 
 					print ("Go Right >>>>>>>>>>>>>>>>")
-					GoRight()
+					GoRight(100)
 					
 				# Go straight	
 				elif (left and right): 
@@ -418,8 +404,14 @@ if __name__ == '__main__' :
 					
 										
 					# An object detected 
+					if (dist <= 6 and isBarrier):
+						print("Object Tracking: OOOOOOOO! Object Detected. ")
+						# Backward(100)
+						
+						# GoLeft(100)
+						StopMortors()
 					
-					if (dist >= 7 and dist <= 10): 
+					elif (dist >= 7 and dist <= 10): 
 						print("Speed 10")
 						Forward(10)	
 						
@@ -437,11 +429,8 @@ if __name__ == '__main__' :
 
 					
 					else:
-						print("OOOOOOOO! Object Detected. ")
-						# Backward(100)
-						
-						GoLeft(100)
-						# StopMortors()		
+						print("Full Speed 45")
+						Forward(45)	
 					
 				
 				
@@ -449,7 +438,7 @@ if __name__ == '__main__' :
 			time.sleep(0.25)
 		GPIO.CleanUp()
 		
-		'''
+		''' '''
 		
 
 	# Reset by Pressing CTRL + C
