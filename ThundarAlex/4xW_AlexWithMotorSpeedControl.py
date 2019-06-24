@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO          
 import time, datetime
+import random
 
 # Working code -- Have to use BCM Board type to control motor
 DutyCycle = 65
@@ -268,6 +269,12 @@ def Backward(cusDuty):
 	
 	
 
+def WheelStriaght(): 
+	print("WheelStriaght")
+	
+	GPIO.output(in3,GPIO.LOW)
+	GPIO.output(in4,GPIO.LOW)
+
 def GoRight(cusDuty): 
 	print("Right")
 	
@@ -370,9 +377,23 @@ if __name__ == '__main__' :
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
 			
 			# An object detected 
-			if (dist <= 6 and isBarrier): 
+			if (dist <= 10 and isBarrier): 
 				print("Main: OOOOOOOO! Object Detected")
-				StopMortors()	
+				# StopMortors()	
+				
+				Backward(100)		
+				time.sleep(0.7)
+				
+				randNum = random.randint(0, 1)
+				
+				if randNum == 0: 
+					GoLeft(100)
+				else:
+					GoRight(100)
+				
+				Forward(50)
+					
+				
 			else:
 			
 				# Line Tracking
@@ -393,7 +414,8 @@ if __name__ == '__main__' :
 				# Go straight	
 				elif (left and right): 
 					print (">>>>>>>>>> Straight <<<<<<<<<<")	
-					Forward(100)
+					WheelStriaght()
+					Forward(30)
 					
 					
 				else: 
@@ -404,16 +426,16 @@ if __name__ == '__main__' :
 					
 										
 					# An object detected 
-					if (dist <= 6 and isBarrier):
+					if (dist <= 10 and isBarrier):
 						print("Object Tracking: OOOOOOOO! Object Detected. ")
 						# Backward(100)
 						
 						# GoLeft(100)
 						StopMortors()
 					
-					elif (dist >= 7 and dist <= 10): 
-						print("Speed 10")
-						Forward(10)	
+					# elif (dist >= 7 and dist <= 10): 
+						# print("Speed 10")
+						# Forward(10)	
 						
 					elif (dist >= 11 and dist <= 20): 
 						print("Speed 20")
@@ -430,7 +452,7 @@ if __name__ == '__main__' :
 					
 					else:
 						print("Full Speed 45")
-						Forward(45)	
+						Forward(55)	
 					
 				
 				
