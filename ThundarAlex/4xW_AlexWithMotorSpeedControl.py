@@ -293,6 +293,38 @@ def GoLeft(cusDuty):
 		
 	p2.ChangeDutyCycle(cusDuty)
 	
+	
+def Go_Forward_Left(custDutyTurn, custDutyMotor, restTime): 
+	GoLeft(custDutyTurn)
+	time.sleep(restTime)
+	Forward(custDutyMotor)
+	
+def Go_Forward_Right(custDutyTurn, custDutyMotor, restTime): 
+	GoRight(custDutyTurn)
+	time.sleep(restTime)
+	Forward(custDutyMotor)
+	
+def Go_Backward_Left(custDutyTurn, custDutyMotor, restTime, motorTime): 
+	GoLeft(custDutyTurn)
+	#time.sleep(restTime)
+	Backward(custDutyMotor)
+	time.sleep(motorTime)
+	
+def Go_Backward_Right(custDutyTurn, custDutyMotor, restTime, motorTime): 
+	GoRight(custDutyTurn)
+	time.sleep(restTime)
+	Backward(custDutyMotor)		
+	time.sleep(motorTime)
+	
+def Go_Forward_Straight(custDutyTurn, custDutyMotor): 
+	WheelStriaght()
+	Forward(custDutyMotor)	
+	
+def Go_Backward_Straight(custDutyTurn, custDutyMotor): 
+	WheelStriaght()
+	Backward(custDutyMotor)
+		
+	
 def StopMortors(): 
 	print("All motors stop")
 	GPIO.output(in1,GPIO.LOW)
@@ -343,6 +375,10 @@ if __name__ == '__main__' :
 
 	try : 
 		
+		restTime = 0.60
+		turnSpeed = 100
+		motorSpeed = 60
+		lineTracking = True
 		
 		StopMortors() # Initializing 
 		''' 
@@ -369,57 +405,123 @@ if __name__ == '__main__' :
 		
 		
 		''' '''
+		print("Enter Input \r\n")
+		print("o: Obstacle Avoidance \r\n")
+		print("l:  line trakcing \r\n")
+		
+		input_str = raw_input() ### Python 3 keyboard input
+		
 		while True : 
+			
+			
 			
 			isBarrier = ObsticalAvoidance()
 			
 			dist = Distance()
+			
+			
+				
+			
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
 			
 			# An object detected 
-			if (dist <= 10 and isBarrier): 
+			# if (dist <= 10 and isBarrier): 
+			if (dist <= 10 or isBarrier): 
 				print("Main: OOOOOOOO! Object Detected")
 				# StopMortors()	
 				
 				Backward(100)		
-				time.sleep(0.7)
+				time.sleep(0.3)
 				
-				randNum = random.randint(0, 1)
+				# Action to turn
+				Go_Backward_Left(turnSpeed, 100, 0.1, 1)
+				
+				
+				'''
+				randNum = random.randint(0, 2)
 				
 				if randNum == 0: 
-					GoLeft(100)
-				else:
-					GoRight(100)
+					GoLeft(turnSpeed)	
+					time.sleep(0.2)					
+					Backward(motorSpeed)
+					time.sleep(0.3)
+					
+					GoRight(turnSpeed)	
+					time.sleep(0.2)					
+					Backward(motorSpeed)
+					time.sleep(0.3)
+					
+					# GoRight(turnSpeed)
+					Go_Forward_Straight(turnSpeed, motorSpeed)					
+					time.sleep(0.3)
+					
+				elif randNum == 1: 
+					
+					GoRight(turnSpeed)	
+					time.sleep(0.2)					
+					Backward(motorSpeed)
+					time.sleep(0.5)
+					
+					GoLeft(turnSpeed)	
+					time.sleep(0.2)				
+					Backward(motorSpeed)
+					time.sleep(0.5)
+					
+					# GoRight(turnSpeed)
+					Go_Forward_Straight(turnSpeed, motorSpeed)					
+					time.sleep(0.3)
 				
-				Forward(50)
+				else: 
+					GoRight(turnSpeed)	
+					time.sleep(0.2)				
+					Backward(motorSpeed)
+					time.sleep(0.5)
+					
+					GoRight(turnSpeed)					
+					Backward(motorSpeed)
+					time.sleep(0.5)
+					
+					
+					Go_Forward_Straight(turnSpeed, motorSpeed)					
+					time.sleep(0.3)	
+				'''
+				
 					
 				
 			else:
 			
-				# Line Tracking
-				left = Left_LineTracking()
-				right = Right_LineTracking()
-				
-				# Go Left
-				if (left == True and right == False) : 
-					print ("<<<<<<<<<<<<<<<< Go Left")
-					GoLeft(100)
+				### Line Tracking Choose
+				if input_str == "l":
+					
+					# Line Tracking Sensor Input
+					left = Left_LineTracking()
+					right = Right_LineTracking()
+					
+					print (">>>>>>>>>>>>>>> Go Straight >>>>>>>>>>>>>>>>")
+					Go_Forward_Straight(turnSpeed, motorSpeed)
+					
+					# Go Left
+					if (left == True and right == False) : 
+						print ("<<<<<<<<<<<<<<<< Go Left")						
+						Go_Forward_Left(turnSpeed, motorSpeed, restTime)
+							
 						
+					# Go Right	
+					elif (left == False and right == True) : 
+						print ("Go Right >>>>>>>>>>>>>>>>")
+						Go_Forward_Right(turnSpeed, motorSpeed, restTime)
+						time.sle
+						
+						
+					# else: 
+						# print (">>>>>>>>>>>>>>> Go Straight >>>>>>>>>>>>>>>>")
+						Go_Forward_Straight(turnSpeed, motorSpeed)
 					
-				# Go Right	
-				elif (left == False and right == True) : 
-					print ("Go Right >>>>>>>>>>>>>>>>")
-					GoRight(100)
-					
-				# Go straight	
-				elif (left and right): 
-					print (">>>>>>>>>> Straight <<<<<<<<<<")	
-					WheelStriaght()
-					Forward(30)
+						# print ("------------ SEARCHING for LINE -------------")	
+						# Go_Backward_Straight(turnSpeed, 30)
 					
 					
 				else: 
-					# StopMortors()	
 					
 					print (">>>>>>>>>> Straight with Object detection <<<<<<<<<<")	
 					Forward(70)
@@ -446,13 +548,13 @@ if __name__ == '__main__' :
 						Forward(35)	
 						
 					elif (dist >= 31 and dist <= 276): 
-						print("Full Speed 45")
-						Forward(45)
+						print("Full Speed 85")
+						Forward(85)
 
 					
 					else:
-						print("Full Speed 45")
-						Forward(55)	
+						print("Full Speed 100")
+						Forward(100)	
 					
 				
 				
