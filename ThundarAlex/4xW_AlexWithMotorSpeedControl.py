@@ -157,7 +157,7 @@ def Right_ObstecleTracking():
 
 			
 def Forward(cusDuty): 
-	print("forward")
+	# print("forward")
 	# Motor 1 
 	GPIO.output(in1,GPIO.HIGH)
 	GPIO.output(in2,GPIO.LOW)
@@ -168,7 +168,7 @@ def Forward(cusDuty):
 	
 	
 def Backward(cusDuty): 
-	print("backward")
+	# print("backward")
 	# Motor 1 
 	GPIO.output(in1,GPIO.LOW)
 	GPIO.output(in2,GPIO.HIGH)
@@ -177,14 +177,14 @@ def Backward(cusDuty):
 	
 	
 
-def WheelStriaght(): 
-	print("WheelStriaght")
+def WheelStraight(): 
+	# print("WheelStraight")
 	
 	GPIO.output(in3,GPIO.LOW)
 	GPIO.output(in4,GPIO.LOW)
 
 def GoRight(cusDuty): 
-	print("Right")
+	# print("Right")
 	
 	GPIO.output(in3,GPIO.LOW)
 	GPIO.output(in4,GPIO.HIGH)
@@ -194,7 +194,7 @@ def GoRight(cusDuty):
 	
 	
 def GoLeft(cusDuty): 
-	print("Left")
+	# print("Left")
 	
 	GPIO.output(in3,GPIO.HIGH)
 	GPIO.output(in4,GPIO.LOW)
@@ -374,37 +374,50 @@ if __name__ == '__main__' :
 			## ==================================================================
 			### Line Tracking Choose
 			if input_str == "l":
-				
+				print("Line >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 				## ==================== Line Tracking Sensor Input ====================
 				left = Left_LineTracking()
 				right = Right_LineTracking()
-				
-				print (">>>>>>>>>>>>>>> Go Straight >>>>>>>>>>>>>>>>")
-				Go_Forward_Straight(turnSpeed, motorSpeed)
-				
-				# Go Left
-				if (left == True and right == False) : 
-					print ("<<<<<<<<<<<<<<<< Go Left")						
-					Go_Forward_Left(turnSpeed, motorSpeed)
+
+				if (dist < 20):
+    				
+					motorSpeed = 100
+					if (isBarrierLeft and (not isBarrierRight)):
 						
-					
-				# Go Right	
-				elif (left == False and right == True) : 
-					print ("Go Right >>>>>>>>>>>>>>>>")
-					Go_Forward_Right(turnSpeed, motorSpeed)
-					
-					
-					
-				# else: 
-					# print (">>>>>>>>>>>>>>> Go Straight >>>>>>>>>>>>>>>>")
-					Go_Forward_Straight(turnSpeed, motorSpeed)
+						Go_Backward_Left(turnSpeed, motorSpeed)
+						time.sleep(2)
+						
+					if ((not isBarrierLeft) and isBarrierRight): 
+						
+						Go_Backward_Right(turnSpeed, motorSpeed)
+						time.sleep(2)
+						
+					if (isBarrierLeft and isBarrierRight): 
+						Go_Backward_Straight(turnSpeed, motorSpeed)
+						time.sleep(1.5)
+
+				else: 						
 				
-					# print ("------------ SEARCHING for LINE -------------")	
-					# Go_Backward_Straight(turnSpeed, 30)
+					motorSpeed = 50
+					if (left and (not right)):
+								
+						Go_Forward_Left(turnSpeed, motorSpeed)
+							
+					elif ((not left) and right): 
+						
+						Go_Forward_Right(turnSpeed, motorSpeed)
+
+
+					elif ((not left) and (not right)): 
+						print("[-] No line found")
+						StopMortors()
+
+					else: 
+						Go_Forward_Straight(turnSpeed, motorSpeed)
 			
 			## ==================================================================	
 			## ==================== Object Detection Chocice ====================	
-			else:
+			if input_str == "o":
 				
 				''''''
 				print (">>>>>>>>>> Straight with Object detection <<<<<<<<<<")	
@@ -422,20 +435,34 @@ if __name__ == '__main__' :
 					time.sleep(2)
 					
 					'''
-					motorSpeed = 100
 					if (isBarrierLeft and (not isBarrierRight)):
+						StopMortors()
+						time.sleep(0.1)
+
+						
+						motorSpeed = 100
 						
 						Go_Backward_Left(turnSpeed, motorSpeed)
-						time.sleep(2)
+						time.sleep(1.5)
 						
 					if ((not isBarrierLeft) and isBarrierRight): 
+						StopMortors()
+						time.sleep(0.1)
+
+						
+						motorSpeed = 100
 						
 						Go_Backward_Right(turnSpeed, motorSpeed)
-						time.sleep(2)
+						time.sleep(1.5)
 						
 					if (isBarrierLeft and isBarrierRight): 
+						
+						StopMortors()
+						time.sleep(0.1)
+
+						motorSpeed = 100
 						Go_Backward_Straight(turnSpeed, motorSpeed)
-						time.sleep(1.5)
+						time.sleep(1.2)
 					
 					
 				elif (dist >= 21 and dist <= 30): 
@@ -444,11 +471,11 @@ if __name__ == '__main__' :
 					motorSpeed = 35
 					
 					if (isBarrierLeft and (not isBarrierRight)):
-						print("LEFFFFFFFFFFFFFFFFFFFF_T")
+						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
 						Go_Forward_Right(turnSpeed, motorSpeed)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
-						print("RIGGGGGGGGGGGGGGGGGGGGG_T")
+						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
 						Go_Forward_Left(turnSpeed, motorSpeed)
 						
 					else: 
@@ -460,11 +487,11 @@ if __name__ == '__main__' :
 					motorSpeed = 45
 					
 					if (isBarrierLeft and (not isBarrierRight)):
-						print("LEFFFFFFFFFFFFFFFFFFFF_T")
+						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
 						Go_Forward_Right(turnSpeed, motorSpeed)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
-						print("RIGGGGGGGGGGGGGGGGGGGGG_T")
+						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
 						Go_Forward_Left(turnSpeed, motorSpeed)
 						
 					else: 
@@ -476,11 +503,11 @@ if __name__ == '__main__' :
 					motorSpeed = 55
 					
 					if (isBarrierLeft and (not isBarrierRight)):
-						print("LEFFFFFFFFFFFFFFFFFFFF_T")
+						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
 						Go_Forward_Right(turnSpeed, motorSpeed)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
-						print("RIGGGGGGGGGGGGGGGGGGGGG_T")
+						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
 						Go_Forward_Left(turnSpeed, motorSpeed)
 						
 					else: 
@@ -488,14 +515,14 @@ if __name__ == '__main__' :
 					
 				elif (dist >= 60 and dist <= 150): 
 					
-					motorSpeed = 85
+					motorSpeed = 100
 					
 					if (isBarrierLeft and (not isBarrierRight)):
-						print("LEFFFFFFFFFFFFFFFFFFFF_T")
+						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
 						Go_Forward_Right(turnSpeed, motorSpeed)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
-						print("RIGGGGGGGGGGGGGGGGGGGGG_T")
+						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
 						Go_Forward_Left(turnSpeed, motorSpeed)
 						
 					else: 
@@ -507,11 +534,11 @@ if __name__ == '__main__' :
 					motorSpeed = 100
 					
 					if (isBarrierLeft and (not isBarrierRight)):
-						print("LEFFFFFFFFFFFFFFFFFFFF_T")
+						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
 						Go_Forward_Right(turnSpeed, motorSpeed)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
-						print("RIGGGGGGGGGGGGGGGGGGGGG_T")
+						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
 						Go_Forward_Left(turnSpeed, motorSpeed)
 						
 					else: 
