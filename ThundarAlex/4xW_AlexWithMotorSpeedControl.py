@@ -91,19 +91,33 @@ def Distance():
 	GPIO.output(GPIO_TRIGGER, False)
 	
 	StartTime = time.time()
-	StopTime = time.time()
-	count = time.time()
+	
+	count = 0
 	
 	# Save time of StartTime 
-	# while GPIO.input(GPIO_ECHO) == 0 : 
-	while (GPIO.input(GPIO_ECHO) == 0) and (time.time() - count < 0.1): 
+	while (GPIO.input(GPIO_ECHO) == 0): 
 		StartTime = time.time()
+		
+		count += 1
+		if (count >= 1000): 
+			break
+		
+		
+	# print("Count : ", count)
 	
-	count = time.time()			
+	
+	StopTime = time.time()	
+	
+	
+	count = 0
 		
 	# Save time of arrival 
-	while (GPIO.input(GPIO_ECHO) == 1) and (time.time() - count < 0.1): 
+	while (GPIO.input(GPIO_ECHO) == 1) : 
 		StopTime = time.time()
+		
+		count += 1
+		if (count >= 1000): 
+			break
 	
 	
 		
@@ -301,7 +315,6 @@ if __name__ == '__main__' :
 		
 		restTime = 0.60
 		turnSpeed = 100
-		motorSpeed = 60
 		lineTracking = True
 		
 		StopMortors() # Initializing 
@@ -332,8 +345,16 @@ if __name__ == '__main__' :
 		print("Enter Input \r\n")
 		print("o: Obstacle Avoidance Hello \r\n")
 		print("l:  line trakcing \r\n")
+		speedDown25 = 10
+		speedDown31 = 20
+		speedDown41 = 40
+		speedDown61 = 80
+		
+		motorSpeed = 100
+		
 		
 		input_str = raw_input() ### Python 3 keyboard input
+		
 		
 		while True : 
 			
@@ -419,22 +440,18 @@ if __name__ == '__main__' :
 			## ==================== Object Detection Chocice ====================	
 			if input_str == "o":
 				
-				''''''
-				print (">>>>>>>>>> Straight with Object detection <<<<<<<<<<")	
+				
+				
+				#print (">>>>>>>>>> Straight with Object detection <<<<<<<<<<")	
 				#Forward(70)
 				
 									
 				# An object detected 
 				
 				# if (dist <= 10 and isBarrierLeft and isBarrierRight):
-				if (dist < 20):
+				if (dist < 30):
 					
-					'''
-					motorSpeed = 100
-					Go_Backward_Straight(turnSpeed, motorSpeed)
-					time.sleep(2)
 					
-					'''
 					if (isBarrierLeft and (not isBarrierRight)):
 						StopMortors()
 						time.sleep(0.1)
@@ -443,7 +460,7 @@ if __name__ == '__main__' :
 						motorSpeed = 100
 						
 						Go_Backward_Left(turnSpeed, motorSpeed)
-						time.sleep(1.5)
+						time.sleep(1.25)
 						
 					if ((not isBarrierLeft) and isBarrierRight): 
 						StopMortors()
@@ -453,7 +470,7 @@ if __name__ == '__main__' :
 						motorSpeed = 100
 						
 						Go_Backward_Right(turnSpeed, motorSpeed)
-						time.sleep(1.5)
+						time.sleep(1.25)
 						
 					if (isBarrierLeft and isBarrierRight): 
 						
@@ -462,73 +479,79 @@ if __name__ == '__main__' :
 
 						motorSpeed = 100
 						Go_Backward_Straight(turnSpeed, motorSpeed)
-						time.sleep(1.2)
+						time.sleep(1.25)
+						
+				
+				elif (dist >= 25 and dist <= 30): 
 					
 					
-				elif (dist >= 21 and dist <= 30): 
+					motorSpeed = 10
 					
-					
-					motorSpeed = 35
 					
 					if (isBarrierLeft and (not isBarrierRight)):
 						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
-						Go_Forward_Right(turnSpeed, motorSpeed)
+						Go_Forward_Right(turnSpeed, speedDown25)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
 						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
-						Go_Forward_Left(turnSpeed, motorSpeed)
+						Go_Forward_Left(turnSpeed, speedDown25)
 						
 					else: 
-						Go_Forward_Straight(turnSpeed, motorSpeed)
+						StopMortors()
+						time.sleep(0.5)
+						Go_Forward_Straight(turnSpeed, speedDown25)
+						
+					speedDown25 -= 2
+					
+					
+					if speedDown25 <= 0: 
+						speedDown25 = 10
+				
 						
 				elif (dist >= 31 and dist <= 40): 
 					
 					
-					motorSpeed = 45
+					motorSpeed = 30
 					
 					if (isBarrierLeft and (not isBarrierRight)):
 						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
-						Go_Forward_Right(turnSpeed, motorSpeed)
+						Go_Forward_Right(turnSpeed, speedDown31)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
 						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
-						Go_Forward_Left(turnSpeed, motorSpeed)
+						Go_Forward_Left(turnSpeed, speedDown31)
 						
 					else: 
-						Go_Forward_Straight(turnSpeed, motorSpeed)
+						Go_Forward_Straight(turnSpeed, speedDown31)
+						
+					speedDown31 -= 10
+					
+					if speedDown31 <= 0: 
+						speedDown31 = 30
+						
 						
 				elif (dist >= 41 and dist <= 60): 
 					
 					
-					motorSpeed = 55
+					motorSpeed = 40
 					
 					if (isBarrierLeft and (not isBarrierRight)):
 						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
-						Go_Forward_Right(turnSpeed, motorSpeed)
+						Go_Forward_Right(turnSpeed, speedDown41)
 						
 					elif ((not isBarrierLeft) and isBarrierRight): 
 						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
-						Go_Forward_Left(turnSpeed, motorSpeed)
+						Go_Forward_Left(turnSpeed, speedDown41)
 						
 					else: 
-						Go_Forward_Straight(turnSpeed, motorSpeed)
-					
-				elif (dist >= 60 and dist <= 150): 
-					
-					motorSpeed = 100
-					
-					if (isBarrierLeft and (not isBarrierRight)):
-						# print("LEFFFFFFFFFFFFFFFFFFFF_T")
-						Go_Forward_Right(turnSpeed, motorSpeed)
+						Go_Forward_Straight(turnSpeed, speedDown41)
 						
-					elif ((not isBarrierLeft) and isBarrierRight): 
-						# print("RIGGGGGGGGGGGGGGGGGGGGG_T")
-						Go_Forward_Left(turnSpeed, motorSpeed)
+					speedDown41 -= 10
 						
-					else: 
-						Go_Forward_Straight(turnSpeed, motorSpeed)
-
-										
+					if speedDown41 <= 0: 
+						speedDown41 = 40
+					
+				# elif (dist >= 60 and dist <= 150): 
 				else:
 					
 					motorSpeed = 100
@@ -543,19 +566,15 @@ if __name__ == '__main__' :
 						
 					else: 
 						Go_Forward_Straight(turnSpeed, motorSpeed)
-					
-					
-					
-					
-					
-					
+						
+					speedDown61 -= 10
+						
+					if speedDown61 <= 0: 
+						speedDown61 = 40
 			
-					
-			
-			time.sleep(0.25)
 		GPIO.CleanUp()
 		
-		''' '''
+		
 		
 
 	# Reset by Pressing CTRL + C
