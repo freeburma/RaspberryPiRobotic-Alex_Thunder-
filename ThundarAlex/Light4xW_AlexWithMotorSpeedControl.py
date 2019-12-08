@@ -3,8 +3,14 @@ import time, datetime
 import random
 
 # Working code -- Have to use BCM Board type to control motor
-DutyCycle = 100 # 65
+DutyCycle = 100 #65
 GPIO.setmode(GPIO.BCM)
+
+# =================== Digital Light Sensor Port =========
+LIGHT_PIN = 20 # 2
+GPIO.setup(LIGHT_PIN, GPIO.IN)
+# =================== Digital Light Sensor Port =========
+
 
 # ================ Obstical Avoidance Sensor Port =======
 ObstaclePin = 20
@@ -165,7 +171,7 @@ def Right_ObstecleTracking():
 		# print("[-] D4: Object found on Right side ...")
 		return True		
 	else : 
-		print("[!] Left (D4): Object NOTTTTT detected on Right side")
+		# print("[!] Left (D4): Object NOTTTTT detected on Right side")
 		return False				
 		
 
@@ -308,6 +314,10 @@ def StopMortors():
 	GPIO.output(in2,GPIO.LOW)
 	GPIO.output(in3,GPIO.LOW)
 	GPIO.output(in4,GPIO.LOW)
+	
+def IsLight(): 
+	return GPIO.input(LIGHT_PIN)	
+	
 	
 def DriveWithObjectDetection(dist):
 	
@@ -456,7 +466,7 @@ def DriveWithObjectDetection(dist):
 			Go_Forward_Straight(turnSpeed, motorSpeed)
 			
 			
-	
+			
         
 if __name__ == '__main__' : 
 	
@@ -492,12 +502,12 @@ if __name__ == '__main__' :
 		
 		''' '''
 		print("Enter Input \r\n")
-		print("o: Obstacle Avoidance Hello \r\n")
-		print("l:  line trakcing \r\n")
-		speedDown25 = 10
-		speedDown31 = 20
-		speedDown41 = 40
-		speedDown61 = 80
+		print("0:  line trakcing \r\n")		
+		print("1:  Obstacle Avoidance \r\n")
+		print("2:  Light Seeker \r\n")
+		print("3:  Light Pho \r\n")
+		
+		
 		
 		motorSpeed = 100
 		
@@ -508,42 +518,17 @@ if __name__ == '__main__' :
 		while True : 
 			
 			
-			
-			# isBarrier = ObsticalAvoidance()
 			isBarrierLeft = Left_ObstecleTracking()
 			isBarrierRight = Right_ObstecleTracking()
 			
-			dist = Distance()
-			
-			
-				
-			
+			dist = Distance() ## Getting the distance of the object
 			print ("Measured Distance = %0.2f cm, %0.2fm" %(dist, dist/100))
 			
 			
-			'''
-			# An object detected 
-			# if (dist <= 10 and isBarrier): 
-			# if (dist <= 10 or isBarrier): 
-			if (dist <= 10 or (isBarrierLeft and isBarrierRight)): 
-				print("Main: OOOOOOOO! Object Detected")
-				# StopMortors()	
-				
-				Backward(100)		
-				time.sleep(0.3)
-				
-				## Action to turn
-				Go_Backward_Left(turnSpeed, 100)
-				time.sleep(0.3)
-				
-				
-				
-			else:
-			'''
 			
 			## ==================================================================
 			### Line Tracking Choose
-			if input_str == "l":
+			if input_str == "0":
 				print("Line >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 				## ==================== Line Tracking Sensor Input ====================
 				left = Left_LineTracking()
@@ -585,16 +570,36 @@ if __name__ == '__main__' :
 					else: 
 						Go_Forward_Straight(turnSpeed, motorSpeed)
 			
-			## ==================================================================	
-			## ==================== Object Detection Chocice ====================	
-			if input_str == "o":
+			else: 
+				"""
+				The robot will use the object detection by default because we have to avoid 
+				the obsectles in any situations under the any circumstances. 
 				
+				## ==================================================================	
 				
-				#print (">>>>>>>>>> Straight with Object detection <<<<<<<<<<")	
-				#Forward(70)
-				DriveWithObjectDetection(dist)
+				## ==================================================================	
+				"""
+				## ==================== Object Detection Chocice ====================
+				if input_str == "1":
+					DriveWithObjectDetection(dist)
+					
+				## =========================  Light Seeker  =========================	
+				if input_str == "2": 
+					# print("Light : ", IsLight())
+					if (IsLight() == 0): 
+						DriveWithObjectDetection(dist)
+					else: 
+						StopMortors()
+						
+				## =========================  Light Phobe  ========================= 	
+				if input_str == "3": 
+					# print("Light : ", IsLight())
+					if (IsLight() == 1): 
+						DriveWithObjectDetection(dist)
+					else: 
+						StopMortors()
 				
-									
+			
 		GPIO.CleanUp()
 		
 		
