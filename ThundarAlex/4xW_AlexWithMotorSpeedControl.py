@@ -327,20 +327,25 @@ def DriveWithObjectDetection(dist):
 			time.sleep(0.1)
 
 			
-			motorSpeed = 100
+			motorSpeed = 75
 			
-			Go_Backward_Left(turnSpeed, motorSpeed)
-			time.sleep(1.25)
+			
+			Go_Backward_Right(turnSpeed, motorSpeed)
+			time.sleep(10)
+			
 			
 		if ((not isBarrierLeft) and isBarrierRight): 
 			StopMortors()
 			time.sleep(0.1)
 
 			
-			motorSpeed = 100
+			motorSpeed = 75
 			
-			Go_Backward_Right(turnSpeed, motorSpeed)
-			time.sleep(1.25)
+			
+			Go_Backward_Left(turnSpeed, motorSpeed)
+			time.sleep(10)
+			
+		
 			
 		if (isBarrierLeft and isBarrierRight): 
 			
@@ -349,8 +354,7 @@ def DriveWithObjectDetection(dist):
 
 			motorSpeed = 100
 			Go_Backward_Straight(turnSpeed, motorSpeed)
-			time.sleep(1.25)
-			
+			time.sleep(1.0)
 	
 	elif (dist >= 25 and dist <= 30): 
 		
